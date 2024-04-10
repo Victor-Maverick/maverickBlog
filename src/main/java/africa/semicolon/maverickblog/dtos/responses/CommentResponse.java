@@ -10,6 +10,6 @@ import java.time.LocalDateTime;
 @Getter
 public class CommentResponse {
     private String comment;
-    private User commenter;
+    private String commenter;
     private LocalDateTime timeCommented;
 }
