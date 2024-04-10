@@ -10,6 +10,13 @@ import org.springframework.stereotype.Service;
 import static africa.semicolon.maverickblog.utils.Mapper.map;
 
 @Service
-public interface CommentServices {
-    CommentResponse addComment(CommentRequest commentRequest);
+@AllArgsConstructor
+public class CommentServiceImpl implements CommentServices{
+    private final Comments comments;
+    public CommentResponse addComment(CommentRequest commentRequest) {
+        Comment comment = new Comment();
+        comment.setComment(comment.getComment());
+        comments.save(comment);
+        return map(comment, commentRequest);
+    }
 }
