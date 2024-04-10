@@ -27,4 +27,15 @@ public class CommentServicesTest {
         commentServices.addComment(commentRequest);
         assertEquals(1, comments.count());
     }
+
+    @Test
+    public void deleteCommentTest(){
+        CommentRequest commentRequest = new CommentRequest();
+        commentRequest.setCommenterName("name");
+        commentRequest.setComment("new comment");
+        commentServices.addComment(commentRequest);
+        assertEquals(1, comments.count());
+        DeleteCommentRequest deleteRequest = new DeleteCommentRequest();
+        commentServices.deleteComment(deleteCommentRequest);
+    }
 }
