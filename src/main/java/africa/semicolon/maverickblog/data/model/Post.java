@@ -16,5 +16,7 @@ public class Post {
     private Integer id;
     private String title;
     private String content;
+    @ManyToMany
+    private List<View> views;
 
 }
