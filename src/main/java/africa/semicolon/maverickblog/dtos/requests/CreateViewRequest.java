@@ -1,4 +1,4 @@
-package africa.semicolon.maverickblog.dtos;
+package africa.semicolon.maverickblog.dtos.requests;
 
 import lombok.Data;
 
