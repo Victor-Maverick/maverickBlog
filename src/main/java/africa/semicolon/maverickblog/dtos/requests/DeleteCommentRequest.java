@@ -6,6 +6,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class DeleteCommentRequest {
-    private Integer id;
+    private String postId;
+    private String commentId;
     private String author;
 }

@@ -2,9 +2,11 @@ package africa.semicolon.maverickblog.services;
 
 import africa.semicolon.maverickblog.data.model.Post;
 import africa.semicolon.maverickblog.dtos.requests.AddViewRequest;
+import africa.semicolon.maverickblog.dtos.requests.CommentRequest;
 import africa.semicolon.maverickblog.dtos.requests.CreatePostRequest;
 import africa.semicolon.maverickblog.dtos.requests.RegisterRequest;
 import africa.semicolon.maverickblog.dtos.responses.AddPostResponse;
+import africa.semicolon.maverickblog.dtos.responses.CommentResponse;
 import africa.semicolon.maverickblog.dtos.responses.RegisterResponse;
 import org.springframework.stereotype.Service;
 
@@ -20,4 +22,6 @@ public interface UserServices {
     List<Post> findPostFor(String username);
 
     void viewPost(AddViewRequest viewRequest);
+
+    CommentResponse addComment(CommentRequest commentRequest);
 }

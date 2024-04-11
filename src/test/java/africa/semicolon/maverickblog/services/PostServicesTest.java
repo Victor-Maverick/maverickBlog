@@ -1,10 +1,10 @@
 package africa.semicolon.maverickblog.services;
 
 import africa.semicolon.maverickblog.data.model.Post;
+import africa.semicolon.maverickblog.data.repository.Comments;
 import africa.semicolon.maverickblog.data.repository.Posts;
-import africa.semicolon.maverickblog.dtos.requests.CreatePostRequest;
-import africa.semicolon.maverickblog.dtos.requests.DeletePostRequest;
-import africa.semicolon.maverickblog.dtos.requests.EditPostRequest;
+import africa.semicolon.maverickblog.data.repository.Views;
+import africa.semicolon.maverickblog.dtos.requests.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +17,14 @@ public class PostServicesTest {
     PostServices postServices;
     @Autowired
     Posts posts;
+    @Autowired
+    Views views;
+    @Autowired
+    Comments comments;
+
     @BeforeEach
     public void setUp() {
+        comments.deleteAll();
         posts.deleteAll();
     }
 
@@ -61,6 +67,59 @@ public class PostServicesTest {
         deleteRequest.setId(response.getId());
         postServices.deletePost(deleteRequest);
         assertEquals(0, posts.count());
+    }
+    @Test
+    public void viewPostTest(){
+        CreatePostRequest postRequest = new CreatePostRequest();
+        postRequest.setTitle("new note");
+        postRequest.setContent("new content");
+        postRequest.setAuthor("username");
+        var postResponse = postServices.addPost(postRequest);
+
+        AddViewRequest viewRequest = new AddViewRequest();
+        viewRequest.setViewerName("username2");
+        viewRequest.setPostId(postResponse.getId());
+        postServices.viewPost(viewRequest);
+        assertEquals(1, views.count());
+    }
+
+    @Test
+    public void addCommentTest(){
+        CreatePostRequest postRequest = new CreatePostRequest();
+        postRequest.setTitle("new note");
+        postRequest.setContent("new content");
+        postRequest.setAuthor("username");
+        var postResponse = postServices.addPost(postRequest);
+
+        CommentRequest commentRequest = new CommentRequest();
+        commentRequest.setPostId(postResponse.getId());
+        commentRequest.setComment("new comment");
+        commentRequest.setCommenterName("username");
+        postServices.addComment(commentRequest);
+        assertEquals(1, comments.count());;
+    }
+
+    @Test
+    public void deleteCommentTest(){
+        CreatePostRequest postRequest = new CreatePostRequest();
+        postRequest.setTitle("new note");
+        postRequest.setContent("new content");
+        postRequest.setAuthor("username");
+        var postResponse = postServices.addPost(postRequest);
+
+        CommentRequest commentRequest = new CommentRequest();
+        commentRequest.setPostId(postResponse.getId());
+        commentRequest.setComment("new comment");
+        commentRequest.setCommenterName("username");
+        var commentResponse  = postServices.addComment(commentRequest);
+        System.out.println(commentResponse);
+        assertEquals(1, comments.count());
+        DeleteCommentRequest deleteRequest = new DeleteCommentRequest();
+        deleteRequest.setPostId(postResponse.getId());
+        deleteRequest.setCommentId(commentResponse.getId());
+        deleteRequest.setAuthor("username");
+        postServices.deleteComment(deleteRequest);
+        assertEquals(0, comments.count());
     }
 
 }

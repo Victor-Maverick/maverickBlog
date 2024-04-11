@@ -30,7 +30,7 @@ public class Mapper {
     }
     public static void map(Post post, CreatePostRequest postRequest){
         post.setTitle(postRequest.getTitle());
-        post.setContent(post.getContent());
+        post.setContent(postRequest.getContent());
         post.setAuthor(postRequest.getAuthor());
     }
     public static AddPostResponse mapAdd(Post post){
@@ -62,6 +62,15 @@ public class Mapper {
         response.setEmail(user.getEmail());
         response.setDateCreated(user.getDateCreated());
         response.setPhoneNumber(user.getPhoneNumber());
+        return response;
+    }
+
+    public static CommentResponse map(Comment comment){
+        CommentResponse response = new CommentResponse();
+        response.setId(comment.getId());
+        response.setComment(comment.getComment());
+        response.setCommenter(response.getCommenter());
+        response.setTimeCommented(LocalDateTime.now());
         return response;
     }
 }

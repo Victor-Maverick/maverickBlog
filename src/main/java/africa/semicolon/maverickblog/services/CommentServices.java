@@ -6,9 +6,13 @@ import africa.semicolon.maverickblog.dtos.requests.DeleteCommentRequest;
 import africa.semicolon.maverickblog.dtos.responses.CommentResponse;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public interface CommentServices {
     CommentResponse addComment(CommentRequest commentRequest);
 
     String deleteComment(DeleteCommentRequest deleteRequest);
+
+    Comment findById(String id);
 }

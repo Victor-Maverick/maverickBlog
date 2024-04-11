@@ -6,6 +6,6 @@ import lombok.Setter;
 @Setter
 @Getter
 public class DeletePostRequest {
-    private Integer id;
+    private String id;
     private String author;
 }

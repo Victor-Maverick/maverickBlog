@@ -1,19 +1,17 @@
 package africa.semicolon.maverickblog.services;
 
+import africa.semicolon.maverickblog.data.model.Comment;
 import africa.semicolon.maverickblog.data.model.Post;
+import africa.semicolon.maverickblog.data.model.View;
 import africa.semicolon.maverickblog.data.repository.Posts;
-import africa.semicolon.maverickblog.dtos.requests.AddViewRequest;
-import africa.semicolon.maverickblog.dtos.requests.CreatePostRequest;
-import africa.semicolon.maverickblog.dtos.requests.DeletePostRequest;
-import africa.semicolon.maverickblog.dtos.requests.EditPostRequest;
+import africa.semicolon.maverickblog.dtos.requests.*;
 import africa.semicolon.maverickblog.dtos.responses.AddPostResponse;
+import africa.semicolon.maverickblog.dtos.responses.CommentResponse;
 import africa.semicolon.maverickblog.dtos.responses.EditPostResponse;
+import africa.semicolon.maverickblog.dtos.responses.ViewResponse;
 import africa.semicolon.maverickblog.exceptions.PostNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +23,7 @@ import static africa.semicolon.maverickblog.utils.Mapper.mapAdd;
 public class PostServicesImpl implements PostServices{
     private final Posts posts;
     private final ViewServices viewServices;
+    private final CommentServices commentServices;
     @Override
     public AddPostResponse addPost(CreatePostRequest postRequest) {
         Post post = new Post();
@@ -52,8 +51,8 @@ public class PostServicesImpl implements PostServices{
 
 
     @Override
-    public Optional<Post> findById(Integer id) {
-        return posts.findById(id);
+    public Post findById(String id) {
+        return posts.findPostById(id);
     }
 
     @Override
@@ -63,9 +62,39 @@ public class PostServicesImpl implements PostServices{
 
     @Override
     public void viewPost(AddViewRequest viewRequest) {
-        Optional<Post> post = findById(viewRequest.getPostId());
-        viewServices.addView(viewRequest);
-
-
+        Post post = findById(viewRequest.getPostId());
+        ViewResponse response = viewServices.addView(viewRequest);
+        View view = viewServices.findBy(response.getId());
+        if(post==null)throw new PostNotFoundException("post not found");
+        List<View> views = post.getViews();
+        views.add(view);
+        post.setViews(views);
+        posts.save(post);
     }
+
+    @Override
+    public CommentResponse addComment(CommentRequest commentRequest) {
+        Post post = findById(commentRequest.getPostId());
+        CommentResponse response = commentServices.addComment(commentRequest);
+        Comment comment = commentServices.findById(response.getId());
+        if(post == null)throw new PostNotFoundException("post not found");
+        List<Comment>comments = post.getComments();
+        comments.add(comment);
+        post.setComments(comments);
+        posts.save(post);
+        return response;
+    }
+
+    @Override
+    public void deleteComment(DeleteCommentRequest deleteRequest) {
+        Post post = findById(deleteRequest.getPostId());
+        if(post==null)throw new PostNotFoundException("post not found");
+        List<Comment>comments = post.getComments();
+        comments.removeIf(comment -> comment.getId() == deleteRequest.getCommentId());
+        post.setComments(comments);
+        commentServices.deleteComment(deleteRequest);
+        posts.save(post);
+    }
+
+
 }

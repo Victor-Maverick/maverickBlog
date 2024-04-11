@@ -6,7 +6,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class EditPostRequest {
-    private Integer id;
+    private String id;
     private String newTitle;
     private String newContent;
 }

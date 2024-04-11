@@ -1,30 +1,23 @@
 package africa.semicolon.maverickblog.data.model;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Setter
-@Getter
-@RequiredArgsConstructor
-@Entity
-@Table(name="posts")
+@Data
+@Document("post")
 public class Post {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Integer id;
+    private String id;
     private String title;
     private String content;
-
     private String author;
-    @ManyToMany
+    @DBRef
     private List<View> views = new ArrayList<>();
-    @ManyToMany
+    @DBRef
     private List<Comment> comments = new ArrayList<>();
     private LocalDateTime dateCreated = LocalDateTime.now();
     private LocalDateTime dateUpdated;

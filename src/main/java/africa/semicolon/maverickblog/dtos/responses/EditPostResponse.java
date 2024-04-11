@@ -1,14 +1,14 @@
 package africa.semicolon.maverickblog.dtos.responses;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+@Data
 public class EditPostResponse {
-    private Integer id;
+    private String id;
     private String newTitle;
     private String newContent;
     private LocalDateTime dateUpdated;

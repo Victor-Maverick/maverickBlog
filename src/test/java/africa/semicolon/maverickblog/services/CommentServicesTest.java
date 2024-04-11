@@ -38,7 +38,7 @@ public class CommentServicesTest {
         var comment = commentServices.addComment(commentRequest);
         assertEquals(1, comments.count());
         DeleteCommentRequest deleteRequest = new DeleteCommentRequest();
-        deleteRequest.setId(comment.getId());
+        deleteRequest.setCommentId(comment.getId());
         commentServices.deleteComment(deleteRequest);
         assertEquals(0, comments.count());
     }

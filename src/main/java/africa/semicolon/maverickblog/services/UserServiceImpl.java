@@ -3,6 +3,7 @@ package africa.semicolon.maverickblog.services;
 import africa.semicolon.maverickblog.data.model.Post;
 import africa.semicolon.maverickblog.data.model.User;
 import africa.semicolon.maverickblog.data.repository.Users;
+import africa.semicolon.maverickblog.dtos.requests.AddViewRequest;
 import africa.semicolon.maverickblog.dtos.requests.CreatePostRequest;
 import africa.semicolon.maverickblog.dtos.requests.RegisterRequest;
 import africa.semicolon.maverickblog.dtos.responses.AddPostResponse;
@@ -32,19 +33,27 @@ public class UserServiceImpl implements UserServices{
     @Override
     public AddPostResponse addPost(CreatePostRequest postRequest) {
         AddPostResponse response = postServices.addPost(postRequest);
-        Optional<User> user = users.findByUsername(response.getAuthor());
-        if(user.isEmpty())throw new UserNotFoundException("user not found");
-        List<Post> userPosts = user.get().getPosts();
-        Optional<Post> post = postServices.findById(response.getId());
-        post.ifPresent(userPosts::add);
-        user.get().setPosts(userPosts);
-        users.save(user.get());
-        return response;
+        User user = users.findByUsername(postRequest.getAuthor());
+        System.out.println(user);
+        if(user == null)throw new UserNotFoundException("user not found");
+        List<Post> userPosts = user.getPosts();
+        Post post = postServices.findById(response.getId());
+        userPosts.add(post);
+        user.setPosts(userPosts);
+        users.save(user);
+       return response;
     }
 
     @Override
     public List<Post> findPostFor(String username) {
         return postServices.findByAuthor(username);
+    }
+
+    @Override
+    public void viewPost(AddViewRequest viewRequest) {
+        User user = users.findByUsername(viewRequest.getViewerName());
+        if (user == null)throw new UserNotFoundException(viewRequest.getViewerName()+" not found");
+        postServices.viewPost(viewRequest);
     }
 
 

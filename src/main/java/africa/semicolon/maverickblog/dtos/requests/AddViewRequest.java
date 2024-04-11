@@ -5,6 +5,6 @@ import lombok.Setter;
 @Setter
 @Getter
 public class AddViewRequest {
-    private Integer postId;
+    private String postId;
     private String viewerName;
 }

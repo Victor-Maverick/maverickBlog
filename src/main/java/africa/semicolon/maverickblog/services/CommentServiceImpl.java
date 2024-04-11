@@ -26,9 +26,14 @@ public class CommentServiceImpl implements CommentServices{
 
     @Override
     public String deleteComment(DeleteCommentRequest deleteRequest) {
-        Optional<Comment> comment = comments.findById(deleteRequest.getId());
-        if (comment.isEmpty())throw new NonExistingCommentException("no such comment");
-        comments.delete(comment.get());
+        Comment comment = findById(deleteRequest.getCommentId());
+        if (comment == null)throw new NonExistingCommentException("no such comment");
+        comments.delete(comment);
         return "delete successful";
+    }
+
+    @Override
+    public Comment findById(String id) {
+        return comments.findCommentById(id);
     }
 }

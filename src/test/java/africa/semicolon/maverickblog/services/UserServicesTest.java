@@ -1,10 +1,11 @@
 package africa.semicolon.maverickblog.services;
 
+import africa.semicolon.maverickblog.data.repository.Comments;
 import africa.semicolon.maverickblog.data.repository.Users;
 import africa.semicolon.maverickblog.dtos.requests.AddViewRequest;
+import africa.semicolon.maverickblog.dtos.requests.CommentRequest;
 import africa.semicolon.maverickblog.dtos.requests.CreatePostRequest;
 import africa.semicolon.maverickblog.dtos.requests.RegisterRequest;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ public class UserServicesTest {
     UserServices userServices;
     @Autowired
     Users users;
+    @Autowired
+    Comments comments;
     @BeforeEach
     public void setUp() {
         users.deleteAll();
@@ -49,12 +52,13 @@ public class UserServicesTest {
         postRequest.setAuthor("username");
         userServices.addPost(postRequest);
         assertEquals(1, userServices.findPostFor("username").size());
+
     }
 
     @Test
     public void viewPostTest(){
         RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setUsername("username");
+        registerRequest.setUsername("username4");
         registerRequest.setPassword("password");
         registerRequest.setEmail("vic@gmail.com");
         registerRequest.setPhoneNumber("08148624687");
@@ -62,7 +66,7 @@ public class UserServicesTest {
         CreatePostRequest postRequest = new CreatePostRequest();
         postRequest.setTitle("new note");
         postRequest.setContent("new content");
-        postRequest.setAuthor("username");
+        postRequest.setAuthor("username4");
         var postResponse = userServices.addPost(postRequest);
 
         RegisterRequest registerRequest2 = new RegisterRequest();
@@ -75,6 +79,36 @@ public class UserServicesTest {
         viewRequest.setViewerName("username2");
         viewRequest.setPostId(postResponse.getId());
         userServices.viewPost(viewRequest);
+        assertEquals(1, userServices.findPostFor("username4").size());
+    }
+
+    @Test
+    public void addCommentTest(){
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setUsername("username4");
+        registerRequest.setPassword("password");
+        registerRequest.setEmail("vic@gmail.com");
+        registerRequest.setPhoneNumber("08148624687");
+        userServices.register(registerRequest);
+        CreatePostRequest postRequest = new CreatePostRequest();
+        postRequest.setTitle("new note");
+        postRequest.setContent("new content");
+        postRequest.setAuthor("username4");
+        var postResponse = userServices.addPost(postRequest);
+
+        RegisterRequest registerRequest2 = new RegisterRequest();
+        registerRequest2.setUsername("username2");
+        registerRequest2.setPassword("password2");
+        registerRequest2.setEmail("vic2@gmail.com");
+        registerRequest2.setPhoneNumber("09148624687");
+        userServices.register(registerRequest2);
+
+        CommentRequest commentRequest = new CommentRequest();
+        commentRequest.setPostId(postResponse.getId());
+        commentRequest.setComment("new comment");
+        commentRequest.setCommenterName("username");
+        userServices.addComment(commentRequest);
+        assertEquals(1, comments.count());;
     }
 
 }

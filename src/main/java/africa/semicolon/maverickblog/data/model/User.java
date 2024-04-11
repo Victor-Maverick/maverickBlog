@@ -1,27 +1,22 @@
 package africa.semicolon.maverickblog.data.model;
 
-import jakarta.persistence.*;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.annotation.processing.Generated;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@RequiredArgsConstructor
 @Data
-@Table(name = "user_table")
+@Document("user")
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private String id;
     private String username;
     private String password;
     private String email;
     private String phoneNumber;
-    @OneToMany(fetch = FetchType.EAGER)
+    @DBRef
     private List<Post> posts = new ArrayList<>();
     private LocalDateTime dateCreated = LocalDateTime.now();
 

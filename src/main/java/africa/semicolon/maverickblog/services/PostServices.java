@@ -1,16 +1,13 @@
 package africa.semicolon.maverickblog.services;
 
 import africa.semicolon.maverickblog.data.model.Post;
-import africa.semicolon.maverickblog.dtos.requests.AddViewRequest;
-import africa.semicolon.maverickblog.dtos.requests.CreatePostRequest;
-import africa.semicolon.maverickblog.dtos.requests.DeletePostRequest;
-import africa.semicolon.maverickblog.dtos.requests.EditPostRequest;
+import africa.semicolon.maverickblog.dtos.requests.*;
 import africa.semicolon.maverickblog.dtos.responses.AddPostResponse;
+import africa.semicolon.maverickblog.dtos.responses.CommentResponse;
 import africa.semicolon.maverickblog.dtos.responses.EditPostResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public interface PostServices {
@@ -21,8 +18,12 @@ public interface PostServices {
 
     String deletePost(DeletePostRequest deleteRequest);
 
-    Optional<Post> findById(Integer id);
+    Post findById(String id);
 
     List<Post> findByAuthor(String username);
     void viewPost(AddViewRequest viewRequest);
+
+    CommentResponse addComment(CommentRequest commentRequest);
+
+    void deleteComment(DeleteCommentRequest deleteRequest);
 }

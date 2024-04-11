@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 public class RegisterResponse {
-    private Integer id;
+    private String id;
     private String username;
     private String email;
     private String phoneNumber;

@@ -1,15 +1,15 @@
 package africa.semicolon.maverickblog.dtos.responses;
 
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Setter
-@Getter
+@Data
 public class CommentResponse {
-    private Integer id;
+    private String id;
     private String comment;
     private String commenter;
     private LocalDateTime timeCommented;
