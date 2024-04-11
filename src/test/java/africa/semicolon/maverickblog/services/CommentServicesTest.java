@@ -35,7 +35,7 @@ public class CommentServicesTest {
         CommentRequest commentRequest = new CommentRequest();
         commentRequest.setCommenterName("name");
         commentRequest.setComment("new comment");
-        Comment comment = commentServices.addComment(commentRequest);
+        var comment = commentServices.addComment(commentRequest);
         assertEquals(1, comments.count());
         DeleteCommentRequest deleteRequest = new DeleteCommentRequest();
         deleteRequest.setId(comment.getId());

@@ -28,8 +28,8 @@ public class PostServicesTest {
         postRequest.setTitle("new post");
         postRequest.setContent("content for new post");
         postRequest.setAuthor("author");
-        Post post = postServices.addPost(postRequest);
-        assertNotNull(post.getId());
+        var response = postServices.addPost(postRequest);
+        assertNotNull(response.getId());
         assertEquals(1, posts.count());
     }
 
@@ -39,10 +39,10 @@ public class PostServicesTest {
         postRequest.setTitle("new post");
         postRequest.setContent("content for new post");
         postRequest.setAuthor("author");
-        Post post = postServices.addPost(postRequest);
+        var response = postServices.addPost(postRequest);
         assertEquals(1, posts.count());
         EditPostRequest editRequest = new EditPostRequest();
-        editRequest.setId(post.getId());
+        editRequest.setId(response.getId());
         editRequest.setNewTitle("updated title");
         editRequest.setNewContent("updated content");
         postServices.editPost(editRequest);
@@ -55,10 +55,10 @@ public class PostServicesTest {
         postRequest.setTitle("new post");
         postRequest.setContent("content for new post");
         postRequest.setAuthor("author");
-        Post post = postServices.addPost(postRequest);
+        var response = postServices.addPost(postRequest);
         assertEquals(1, posts.count());
         DeletePostRequest deleteRequest = new DeletePostRequest();
-        deleteRequest.setId(post.getId());
+        deleteRequest.setId(response.getId());
         postServices.deletePost(deleteRequest);
         assertEquals(0, posts.count());
     }

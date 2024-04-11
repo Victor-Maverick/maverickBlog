@@ -5,6 +5,7 @@ import africa.semicolon.maverickblog.data.repository.Posts;
 import africa.semicolon.maverickblog.dtos.requests.CreatePostRequest;
 import africa.semicolon.maverickblog.dtos.requests.DeletePostRequest;
 import africa.semicolon.maverickblog.dtos.requests.EditPostRequest;
+import africa.semicolon.maverickblog.dtos.responses.AddPostResponse;
 import africa.semicolon.maverickblog.dtos.responses.EditPostResponse;
 import africa.semicolon.maverickblog.exceptions.PostNotFoundException;
 import lombok.AllArgsConstructor;
@@ -14,19 +15,20 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static africa.semicolon.maverickblog.utils.Mapper.map;
+import static africa.semicolon.maverickblog.utils.Mapper.mapAdd;
 
 @Service
 @AllArgsConstructor
 public class PostServicesImpl implements PostServices{
     private final Posts posts;
     @Override
-    public Post addPost(CreatePostRequest postRequest) {
+    public AddPostResponse addPost(CreatePostRequest postRequest) {
         Post post = new Post();
         post.setTitle(postRequest.getTitle());
         post.setContent(post.getContent());
         post.setDateCreated(LocalDateTime.now());
         posts.save(post);
-        return post;
+        return mapAdd(post, postRequest);
     }
 
     @Override

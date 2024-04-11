@@ -1,6 +1,5 @@
 package africa.semicolon.maverickblog.dtos.responses;
 
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,9 +7,10 @@ import java.time.LocalDateTime;
 
 @Setter
 @Getter
-public class CommentResponse {
+public class RegisterResponse {
     private Integer id;
-    private String comment;
-    private String commenter;
-    private LocalDateTime timeCommented;
+    private String username;
+    private String email;
+    private String phoneNumber;
+    private LocalDateTime dateCreated;
 }

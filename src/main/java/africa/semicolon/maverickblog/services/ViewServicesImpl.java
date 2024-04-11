@@ -13,10 +13,10 @@ import java.time.LocalDateTime;
 public class ViewServicesImpl implements ViewServices{
     private final Views views;
     @Override
-    public View addView(AddViewRequest viewRequest) {
+    public void addView(AddViewRequest viewRequest) {
         View view = new View();
         view.setDateViewed(LocalDateTime.now());
         views.save(view);
-        return view;
+
     }
 }

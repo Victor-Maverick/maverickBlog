@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import javax.annotation.processing.Generated;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @RequiredArgsConstructor
@@ -17,5 +20,9 @@ public class User {
     private String username;
     private String password;
     private String email;
+    private String phoneNumber;
+    @ManyToMany
+    private List<Post> posts = new ArrayList<>();
+    private LocalDateTime dateCreated = LocalDateTime.now();
 
 }
