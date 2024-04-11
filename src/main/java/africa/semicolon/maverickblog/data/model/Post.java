@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Setter
@@ -18,7 +19,11 @@ public class Post {
     private Integer id;
     private String title;
     private String content;
+    @ManyToOne
+    private User Author;
     @ManyToMany
-    private List<View> views;
+    private List<View> views = new ArrayList<>();
+    @ManyToMany
+    private List<Comment> comments = new ArrayList<>();
 
 }
