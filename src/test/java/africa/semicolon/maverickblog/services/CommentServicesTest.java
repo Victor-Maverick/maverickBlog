@@ -1,5 +1,6 @@
 package africa.semicolon.maverickblog.services;
 
+import africa.semicolon.maverickblog.data.model.Comment;
 import africa.semicolon.maverickblog.data.repository.Comments;
 import africa.semicolon.maverickblog.dtos.requests.CommentRequest;
 import africa.semicolon.maverickblog.dtos.requests.DeleteCommentRequest;
@@ -34,10 +35,11 @@ public class CommentServicesTest {
         CommentRequest commentRequest = new CommentRequest();
         commentRequest.setCommenterName("name");
         commentRequest.setComment("new comment");
-        commentServices.addComment(commentRequest);
+        Comment comment = commentServices.addComment(commentRequest);
         assertEquals(1, comments.count());
         DeleteCommentRequest deleteRequest = new DeleteCommentRequest();
+        deleteRequest.setId(comment.getId());
         commentServices.deleteComment(deleteRequest);
-        assertEquals(1, comments.count());
+        assertEquals(0, comments.count());
     }
 }
