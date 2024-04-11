@@ -2,6 +2,7 @@ package africa.semicolon.maverickblog.services;
 
 import africa.semicolon.maverickblog.data.repository.Comments;
 import africa.semicolon.maverickblog.dtos.requests.CommentRequest;
+import africa.semicolon.maverickblog.dtos.requests.DeleteCommentRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class CommentServicesTest {
         commentServices.addComment(commentRequest);
         assertEquals(1, comments.count());
         DeleteCommentRequest deleteRequest = new DeleteCommentRequest();
-        commentServices.deleteComment(deleteCommentRequest);
+        commentServices.deleteComment(deleteRequest);
+        assertEquals(1, comments.count());
     }
 }

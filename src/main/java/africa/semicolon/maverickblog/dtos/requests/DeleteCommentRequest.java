@@ -6,4 +6,6 @@ import lombok.Setter;
 @Setter
 @Getter
 public class DeleteCommentRequest {
+    private Integer id;
+    private String author;
 }

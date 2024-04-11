@@ -1,15 +1,13 @@
 package africa.semicolon.maverickblog.services;
 
 import africa.semicolon.maverickblog.data.model.Comment;
-import africa.semicolon.maverickblog.data.repository.Comments;
 import africa.semicolon.maverickblog.dtos.requests.CommentRequest;
-import africa.semicolon.maverickblog.dtos.responses.CommentResponse;
-import lombok.AllArgsConstructor;
+import africa.semicolon.maverickblog.dtos.requests.DeleteCommentRequest;
 import org.springframework.stereotype.Service;
-
-import static africa.semicolon.maverickblog.utils.Mapper.map;
 
 @Service
 public interface CommentServices {
-    CommentResponse addComment(CommentRequest commentRequest);
+    Comment addComment(CommentRequest commentRequest);
+
+    String deleteComment(DeleteCommentRequest deleteRequest);
 }
