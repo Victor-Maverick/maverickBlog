@@ -12,6 +12,8 @@ import africa.semicolon.maverickblog.dtos.responses.ViewResponse;
 import africa.semicolon.maverickblog.exceptions.PostNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,7 +59,9 @@ public class PostServicesImpl implements PostServices{
 
     @Override
     public List<Post> findByAuthor(String username) {
-        return posts.findByAuthor(username);
+        List<Post> userPosts = new ArrayList<>();
+        posts.findAll().forEach(post -> {if (post.getAuthor().equalsIgnoreCase(username))userPosts.add(post);});
+        return userPosts;
     }
 
     @Override

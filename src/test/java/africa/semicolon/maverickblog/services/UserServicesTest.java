@@ -1,6 +1,7 @@
 package africa.semicolon.maverickblog.services;
 
 import africa.semicolon.maverickblog.data.repository.Comments;
+import africa.semicolon.maverickblog.data.repository.Posts;
 import africa.semicolon.maverickblog.data.repository.Users;
 import africa.semicolon.maverickblog.dtos.requests.AddViewRequest;
 import africa.semicolon.maverickblog.dtos.requests.CommentRequest;
@@ -21,9 +22,13 @@ public class UserServicesTest {
     Users users;
     @Autowired
     Comments comments;
+    @Autowired
+    Posts posts;
     @BeforeEach
     public void setUp() {
+        comments.deleteAll();
         users.deleteAll();
+        posts.deleteAll();
     }
 
     @Test
@@ -53,6 +58,7 @@ public class UserServicesTest {
         userServices.addPost(postRequest);
         assertEquals(1, userServices.findPostFor("username").size());
 
+
     }
 
     @Test
@@ -79,6 +85,7 @@ public class UserServicesTest {
         viewRequest.setViewerName("username2");
         viewRequest.setPostId(postResponse.getId());
         userServices.viewPost(viewRequest);
+        assertEquals(1, posts.count());
         assertEquals(1, userServices.findPostFor("username4").size());
     }
 
@@ -106,7 +113,7 @@ public class UserServicesTest {
         CommentRequest commentRequest = new CommentRequest();
         commentRequest.setPostId(postResponse.getId());
         commentRequest.setComment("new comment");
-        commentRequest.setCommenterName("username");
+        commentRequest.setCommenterName("username2");
         userServices.addComment(commentRequest);
         assertEquals(1, comments.count());;
     }
