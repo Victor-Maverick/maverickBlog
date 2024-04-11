@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,5 +26,6 @@ public class Post {
     private List<View> views = new ArrayList<>();
     @ManyToMany
     private List<Comment> comments = new ArrayList<>();
-
+    private LocalDateTime dateCreated;
+    private LocalDateTime dateUpdated;
 }
