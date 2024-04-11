@@ -1,6 +1,7 @@
 package africa.semicolon.maverickblog.services;
 
 import africa.semicolon.maverickblog.data.model.Post;
+import africa.semicolon.maverickblog.dtos.requests.AddViewRequest;
 import africa.semicolon.maverickblog.dtos.requests.CreatePostRequest;
 import africa.semicolon.maverickblog.dtos.requests.RegisterRequest;
 import africa.semicolon.maverickblog.dtos.responses.AddPostResponse;
@@ -17,4 +18,6 @@ public interface UserServices {
     AddPostResponse addPost(CreatePostRequest postRequest);
 
     List<Post> findPostFor(String username);
+
+    void viewPost(AddViewRequest viewRequest);
 }
