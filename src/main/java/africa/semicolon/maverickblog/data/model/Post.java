@@ -20,12 +20,12 @@ public class Post {
     private Integer id;
     private String title;
     private String content;
-    @ManyToOne
-    private User Author;
+
+    private String author;
     @ManyToMany
     private List<View> views = new ArrayList<>();
     @ManyToMany
     private List<Comment> comments = new ArrayList<>();
-    private LocalDateTime dateCreated;
+    private LocalDateTime dateCreated = LocalDateTime.now();
     private LocalDateTime dateUpdated;
 }

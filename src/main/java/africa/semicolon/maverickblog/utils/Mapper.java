@@ -28,12 +28,17 @@ public class Mapper {
         post.setContent(editRequest.getNewContent());
         post.setDateUpdated(LocalDateTime.now());
     }
-    public static AddPostResponse mapAdd(Post post, CreatePostRequest postRequest){
+    public static void map(Post post, CreatePostRequest postRequest){
+        post.setTitle(postRequest.getTitle());
+        post.setContent(post.getContent());
+        post.setAuthor(postRequest.getAuthor());
+    }
+    public static AddPostResponse mapAdd(Post post){
         AddPostResponse response = new AddPostResponse();
         response.setId(post.getId());
         response.setTitle(post.getTitle());
         response.setDateCreated(post.getDateCreated());
-        response.setAuthor(postRequest.getAuthor());
+        response.setAuthor(post.getAuthor());
         return response;
     }
     public static EditPostResponse map(Post post){

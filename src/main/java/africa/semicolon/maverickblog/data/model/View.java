@@ -12,7 +12,6 @@ public class View {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
-    @ManyToOne
-    private User viewer;
+    private String viewer;
     private LocalDateTime dateViewed = LocalDateTime.now();
 }

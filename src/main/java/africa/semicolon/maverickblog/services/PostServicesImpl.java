@@ -12,6 +12,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static africa.semicolon.maverickblog.utils.Mapper.map;
@@ -24,11 +26,9 @@ public class PostServicesImpl implements PostServices{
     @Override
     public AddPostResponse addPost(CreatePostRequest postRequest) {
         Post post = new Post();
-        post.setTitle(postRequest.getTitle());
-        post.setContent(post.getContent());
-        post.setDateCreated(LocalDateTime.now());
+        map(post, postRequest);
         posts.save(post);
-        return mapAdd(post, postRequest);
+        return mapAdd(post);
     }
 
     @Override
@@ -46,5 +46,15 @@ public class PostServicesImpl implements PostServices{
         if(post.isEmpty())throw new PostNotFoundException("post not found");
         posts.delete(post.get());
         return "delete successful";
+    }
+
+    @Override
+    public Optional<Post> findById(Integer id) {
+        return posts.findById(id);
+    }
+
+    @Override
+    public List<Post> findByAuthor(String username) {
+        return posts.findByAuthor(username);
     }
 }

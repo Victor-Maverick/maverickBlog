@@ -1,5 +1,6 @@
 package africa.semicolon.maverickblog.services;
 
+import africa.semicolon.maverickblog.data.model.Post;
 import africa.semicolon.maverickblog.data.model.User;
 import africa.semicolon.maverickblog.data.repository.Users;
 import africa.semicolon.maverickblog.dtos.requests.CreatePostRequest;
@@ -10,6 +11,7 @@ import africa.semicolon.maverickblog.exceptions.UserNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import static africa.semicolon.maverickblog.utils.Mapper.map;
@@ -32,7 +34,17 @@ public class UserServiceImpl implements UserServices{
         AddPostResponse response = postServices.addPost(postRequest);
         Optional<User> user = users.findByUsername(response.getAuthor());
         if(user.isEmpty())throw new UserNotFoundException("user not found");
-        return null;
+        List<Post> userPosts = user.get().getPosts();
+        Optional<Post> post = postServices.findById(response.getId());
+        post.ifPresent(userPosts::add);
+        user.get().setPosts(userPosts);
+        users.save(user.get());
+        return response;
+    }
+
+    @Override
+    public List<Post> findPostFor(String username) {
+        return postServices.findByAuthor(username);
     }
 
 

@@ -15,8 +15,8 @@ public class ViewServicesImpl implements ViewServices{
     @Override
     public void addView(AddViewRequest viewRequest) {
         View view = new View();
+        view.setViewer(viewRequest.getViewerName());
         view.setDateViewed(LocalDateTime.now());
         views.save(view);
-
     }
 }
