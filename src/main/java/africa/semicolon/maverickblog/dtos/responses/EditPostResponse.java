@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class EditPostResponse {
-    private String id;
+    private Integer id;
     private String newTitle;
     private String newContent;
     private LocalDateTime dateUpdated;

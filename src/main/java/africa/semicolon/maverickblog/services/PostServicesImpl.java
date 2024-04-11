@@ -3,6 +3,7 @@ package africa.semicolon.maverickblog.services;
 import africa.semicolon.maverickblog.data.model.Post;
 import africa.semicolon.maverickblog.data.repository.Posts;
 import africa.semicolon.maverickblog.dtos.requests.CreatePostRequest;
+import africa.semicolon.maverickblog.dtos.requests.DeletePostRequest;
 import africa.semicolon.maverickblog.dtos.requests.EditPostRequest;
 import africa.semicolon.maverickblog.dtos.responses.EditPostResponse;
 import africa.semicolon.maverickblog.exceptions.PostNotFoundException;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+
+import static africa.semicolon.maverickblog.utils.Mapper.map;
 
 @Service
 @AllArgsConstructor
@@ -30,9 +33,13 @@ public class PostServicesImpl implements PostServices{
     public EditPostResponse editPost(EditPostRequest editRequest) {
         Optional<Post> post = posts.findById(editRequest.getId());
         if(post.isEmpty())throw new PostNotFoundException("post not found");
-        post.get().setTitle(editRequest.getNewTitle());
-        post.get().setContent(editRequest.getNewContent());
-        post.get().setDateUpdated(LocalDateTime.now());
+        map(post.get(), editRequest);
+        posts.save(post.get());
+        return map(post.get());
+    }
+
+    @Override
+    public String deletePost(DeletePostRequest deleteRequest) {
         return null;
     }
 }
