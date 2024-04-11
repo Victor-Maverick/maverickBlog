@@ -58,6 +58,7 @@ public class PostServicesTest {
         Post post = postServices.addPost(postRequest);
         assertEquals(1, posts.count());
         DeletePostRequest deleteRequest = new DeletePostRequest();
+        deleteRequest.setId(post.getId());
         postServices.deletePost(deleteRequest);
         assertEquals(0, posts.count());
     }

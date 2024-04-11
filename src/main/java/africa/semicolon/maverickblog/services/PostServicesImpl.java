@@ -40,6 +40,9 @@ public class PostServicesImpl implements PostServices{
 
     @Override
     public String deletePost(DeletePostRequest deleteRequest) {
-        return null;
+        Optional<Post> post = posts.findById(deleteRequest.getId());
+        if(post.isEmpty())throw new PostNotFoundException("post not found");
+        posts.delete(post.get());
+        return "delete successful";
     }
 }
