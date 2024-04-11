@@ -2,6 +2,7 @@ package africa.semicolon.maverickblog.services;
 
 import africa.semicolon.maverickblog.data.model.Post;
 import africa.semicolon.maverickblog.data.repository.Posts;
+import africa.semicolon.maverickblog.dtos.requests.AddViewRequest;
 import africa.semicolon.maverickblog.dtos.requests.CreatePostRequest;
 import africa.semicolon.maverickblog.dtos.requests.DeletePostRequest;
 import africa.semicolon.maverickblog.dtos.requests.EditPostRequest;
@@ -23,6 +24,7 @@ import static africa.semicolon.maverickblog.utils.Mapper.mapAdd;
 @AllArgsConstructor
 public class PostServicesImpl implements PostServices{
     private final Posts posts;
+    private final ViewServices viewServices;
     @Override
     public AddPostResponse addPost(CreatePostRequest postRequest) {
         Post post = new Post();
@@ -48,6 +50,7 @@ public class PostServicesImpl implements PostServices{
         return "delete successful";
     }
 
+
     @Override
     public Optional<Post> findById(Integer id) {
         return posts.findById(id);
@@ -56,5 +59,13 @@ public class PostServicesImpl implements PostServices{
     @Override
     public List<Post> findByAuthor(String username) {
         return posts.findByAuthor(username);
+    }
+
+    @Override
+    public void viewPost(AddViewRequest viewRequest) {
+        Optional<Post> post = findById(viewRequest.getPostId());
+        viewServices.addView(viewRequest);
+
+
     }
 }

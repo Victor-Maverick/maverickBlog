@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class ViewServicesImpl implements ViewServices{
     private final Views views;
     @Override
-    public void addView(AddViewRequest viewRequest) {
+    public ViewResponse addView(AddViewRequest viewRequest) {
         View view = new View();
         view.setViewer(viewRequest.getViewerName());
         view.setDateViewed(LocalDateTime.now());
