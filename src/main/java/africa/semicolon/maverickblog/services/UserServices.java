@@ -25,4 +25,6 @@ public interface UserServices {
     EditPostResponse editPost(EditPostRequest editRequest);
 
     LoginResponse login(LoginRequest loginRequest);
+
+    String logout(LogoutRequest logoutRequest);
 }

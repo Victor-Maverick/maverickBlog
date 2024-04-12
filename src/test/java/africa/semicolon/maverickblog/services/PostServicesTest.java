@@ -55,6 +55,8 @@ public class PostServicesTest {
         assertEquals(1, posts.count());
     }
 
+
+
     @Test
     public void deletePostTest(){
         CreatePostRequest postRequest = new CreatePostRequest();

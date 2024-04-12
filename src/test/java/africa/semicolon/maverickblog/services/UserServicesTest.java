@@ -229,7 +229,7 @@ public class UserServicesTest {
         }catch (MaverickBlogException e){
             assertEquals(e.getMessage(), "log in first");
         }
-        assertEquals(1, comments.count());
+        assertEquals(0, comments.count());
     }
     @Test
     public void deleteWhileLoggedInCommentTest(){
@@ -315,16 +315,25 @@ public class UserServicesTest {
         commentRequest.setCommenterName("username2");
         var commentResponse = userServices.addComment(commentRequest);
         assertEquals(1, comments.count());
+
+        LogoutRequest logoutRequest = new LogoutRequest();
+        logoutRequest.setUsername("username2");
+        userServices.logout(logoutRequest);
+
         DeleteCommentRequest deleteRequest = new DeleteCommentRequest();
         deleteRequest.setPostId(postResponse.getId());
         deleteRequest.setCommentId(commentResponse.getId());
         deleteRequest.setAuthor("username2");
-        userServices.deleteComment(deleteRequest);
-        assertEquals(0, comments.count());
+        try {
+            userServices.deleteComment(deleteRequest);
+        }catch (MaverickBlogException e){
+            assertEquals(e.getMessage(), "log in first");
+        }
+        assertEquals(1, comments.count());
     }
 
     @Test
-    public void editPostTest(){
+    public void editPostWhileLoggedInTest(){
         RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setUsername("username4");
         registerRequest.setPassword("password");
@@ -349,6 +358,38 @@ public class UserServicesTest {
         assertEquals(1, posts.count());
     }
 
+    @Test
+    public void editPostWithoutLogInTest(){
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setUsername("username4");
+        registerRequest.setPassword("password");
+        registerRequest.setEmail("vic@gmail.com");
+        registerRequest.setPhoneNumber("08148624687");
+        userServices.register(registerRequest);
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("username4");
+        loginRequest.setPassword("password");
+        userServices.login(loginRequest);
+        CreatePostRequest postRequest = new CreatePostRequest();
+        postRequest.setTitle("new note");
+        postRequest.setContent("new content");
+        postRequest.setAuthor("username4");
+        var postResponse = userServices.addPost(postRequest);
+        EditPostRequest editRequest = new EditPostRequest();
+        LogoutRequest logoutRequest = new LogoutRequest();
+        logoutRequest.setUsername("username4");
+        userServices.logout(logoutRequest);
+        editRequest.setId(postResponse.getId());
+        editRequest.setNewTitle("updated title");
+        editRequest.setNewContent("updated content");
+        editRequest.setAuthor("username4");
+        try {
+            userServices.editPost(editRequest);
+        }catch (MaverickBlogException e){
+            assertEquals(e.getMessage(), "log in first");
+        }
+        assertEquals(1, posts.count());
+    }
     @Test
     public void userLoginTest(){
         RegisterRequest registerRequest = new RegisterRequest();
@@ -407,6 +448,24 @@ public class UserServicesTest {
             assertEquals(e.getMessage(), "wrong password");
         }
         assertFalse(users.findByUsername("username").isLoggedIn());
+    }
+
+    @Test
+    public void LogoutTest(){
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setUsername("username4");
+        registerRequest.setPassword("password");
+        registerRequest.setEmail("vic@gmail.com");
+        registerRequest.setPhoneNumber("08148624687");
+        userServices.register(registerRequest);
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("username4");
+        loginRequest.setPassword("password");
+        userServices.login(loginRequest);
+        LogoutRequest logoutRequest = new LogoutRequest();
+        logoutRequest.setUsername("username4");
+        userServices.logout(logoutRequest);
+        assertFalse(users.findByUsername("username4").isLoggedIn());
     }
 
 }

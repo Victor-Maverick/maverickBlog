@@ -94,5 +94,14 @@ public class UserServiceImpl implements UserServices{
         return mapLogin(user);
     }
 
+    @Override
+    public String logout(LogoutRequest logoutRequest) {
+        User user = users.findByUsername(logoutRequest.getUsername());
+        if(user == null)throw new UserNotFoundException(logoutRequest.getUsername()+ " not found");
+        user.setLoggedIn(false);
+        users.save(user);
+        return "logout success";
+    }
+
 
 }
