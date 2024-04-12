@@ -111,7 +111,7 @@ public class UserServicesTest {
 
         LoginRequest loginRequest2 = new LoginRequest();
         loginRequest2.setUsername("username2");
-        loginRequest2.setPassword("password");
+        loginRequest2.setPassword("password2");
         userServices.login(loginRequest2);
 
         AddViewRequest viewRequest = new AddViewRequest();
