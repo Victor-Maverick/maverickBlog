@@ -90,7 +90,7 @@ public class PostServicesImpl implements PostServices{
     }
 
     @Override
-    public void deleteComment(DeleteCommentRequest deleteRequest) {
+    public String deleteComment(DeleteCommentRequest deleteRequest) {
         Post post = findById(deleteRequest.getPostId());
         if(post==null)throw new PostNotFoundException("post not found");
         List<Comment>comments = post.getComments();
@@ -98,6 +98,7 @@ public class PostServicesImpl implements PostServices{
         post.setComments(comments);
         commentServices.deleteComment(deleteRequest);
         posts.save(post);
+        return "delete success";
     }
 
 

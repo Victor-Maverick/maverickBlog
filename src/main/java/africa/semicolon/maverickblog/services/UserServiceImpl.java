@@ -4,13 +4,12 @@ import africa.semicolon.maverickblog.data.model.Comment;
 import africa.semicolon.maverickblog.data.model.Post;
 import africa.semicolon.maverickblog.data.model.User;
 import africa.semicolon.maverickblog.data.repository.Users;
-import africa.semicolon.maverickblog.dtos.requests.AddViewRequest;
-import africa.semicolon.maverickblog.dtos.requests.CommentRequest;
-import africa.semicolon.maverickblog.dtos.requests.CreatePostRequest;
-import africa.semicolon.maverickblog.dtos.requests.RegisterRequest;
+import africa.semicolon.maverickblog.dtos.requests.*;
 import africa.semicolon.maverickblog.dtos.responses.AddPostResponse;
 import africa.semicolon.maverickblog.dtos.responses.CommentResponse;
+import africa.semicolon.maverickblog.dtos.responses.EditPostResponse;
 import africa.semicolon.maverickblog.dtos.responses.RegisterResponse;
+import africa.semicolon.maverickblog.exceptions.PostNotFoundException;
 import africa.semicolon.maverickblog.exceptions.UserNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -62,7 +61,22 @@ public class UserServiceImpl implements UserServices{
     public CommentResponse addComment(CommentRequest commentRequest) {
         User user = users.findByUsername(commentRequest.getCommenterName());
         if (user == null)throw new UserNotFoundException(commentRequest.getCommenterName()+" not found");
+
         return postServices.addComment(commentRequest);
+    }
+
+    @Override
+    public String deleteComment(DeleteCommentRequest deleteRequest) {
+        User user = users.findByUsername(deleteRequest.getAuthor());
+        if (user == null)throw new UserNotFoundException(deleteRequest.getAuthor()+" not found");
+        return postServices.deleteComment(deleteRequest);
+    }
+
+    @Override
+    public EditPostResponse editPost(EditPostRequest editRequest) {
+        User user = users.findByUsername(editRequest.getAuthor());
+        if (user == null)throw new UserNotFoundException(editRequest.getAuthor()+" not found");
+        return postServices.editPost(editRequest);
     }
 
 

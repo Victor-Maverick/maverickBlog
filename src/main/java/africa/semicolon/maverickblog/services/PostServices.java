@@ -25,5 +25,5 @@ public interface PostServices {
 
     CommentResponse addComment(CommentRequest commentRequest);
 
-    void deleteComment(DeleteCommentRequest deleteRequest);
+    String deleteComment(DeleteCommentRequest deleteRequest);
 }

@@ -9,4 +9,5 @@ public class EditPostRequest {
     private String id;
     private String newTitle;
     private String newContent;
+    private String author;
 }
