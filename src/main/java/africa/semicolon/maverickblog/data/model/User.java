@@ -16,6 +16,7 @@ public class User {
     private String password;
     private String email;
     private String phoneNumber;
+    private boolean isLoggedIn;
     @DBRef
     private List<Post> posts = new ArrayList<>();
     private LocalDateTime dateCreated = LocalDateTime.now();

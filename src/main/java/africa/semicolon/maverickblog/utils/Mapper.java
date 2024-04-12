@@ -7,15 +7,22 @@ import africa.semicolon.maverickblog.dtos.requests.CommentRequest;
 import africa.semicolon.maverickblog.dtos.requests.CreatePostRequest;
 import africa.semicolon.maverickblog.dtos.requests.EditPostRequest;
 import africa.semicolon.maverickblog.dtos.requests.RegisterRequest;
-import africa.semicolon.maverickblog.dtos.responses.AddPostResponse;
-import africa.semicolon.maverickblog.dtos.responses.CommentResponse;
-import africa.semicolon.maverickblog.dtos.responses.EditPostResponse;
-import africa.semicolon.maverickblog.dtos.responses.RegisterResponse;
+import africa.semicolon.maverickblog.dtos.responses.*;
 import africa.semicolon.maverickblog.exceptions.PostNotFoundException;
 
 import java.time.LocalDateTime;
 
 public class Mapper {
+
+    public static LoginResponse mapLogin(User user){
+        LoginResponse response = new LoginResponse();
+        response.setId(user.getId());
+        response.setUsername(user.getUsername());
+        response.setPhoneNumber(user.getPhoneNumber());
+        response.setEmail(user.getEmail());
+        response.setLoggedIn(user.isLoggedIn());
+        return response;
+    }
     public static CommentResponse map(Comment comment, CommentRequest commentRequest){
         CommentResponse response = new CommentResponse();
         response.setId(comment.getId());

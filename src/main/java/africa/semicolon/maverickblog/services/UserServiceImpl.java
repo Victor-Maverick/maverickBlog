@@ -5,10 +5,9 @@ import africa.semicolon.maverickblog.data.model.Post;
 import africa.semicolon.maverickblog.data.model.User;
 import africa.semicolon.maverickblog.data.repository.Users;
 import africa.semicolon.maverickblog.dtos.requests.*;
-import africa.semicolon.maverickblog.dtos.responses.AddPostResponse;
-import africa.semicolon.maverickblog.dtos.responses.CommentResponse;
-import africa.semicolon.maverickblog.dtos.responses.EditPostResponse;
-import africa.semicolon.maverickblog.dtos.responses.RegisterResponse;
+import africa.semicolon.maverickblog.dtos.responses.*;
+import africa.semicolon.maverickblog.exceptions.IncorrectPasswordException;
+import africa.semicolon.maverickblog.exceptions.LoginException;
 import africa.semicolon.maverickblog.exceptions.PostNotFoundException;
 import africa.semicolon.maverickblog.exceptions.UserNotFoundException;
 import lombok.AllArgsConstructor;
@@ -18,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static africa.semicolon.maverickblog.utils.Mapper.map;
+import static africa.semicolon.maverickblog.utils.Mapper.mapLogin;
 
 @Service
 @AllArgsConstructor
@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserServices{
         AddPostResponse response = postServices.addPost(postRequest);
         User user = users.findByUsername(postRequest.getAuthor());
         if(user == null)throw new UserNotFoundException("user not found");
+        if (!user.isLoggedIn())throw new LoginException("log in first");
         List<Post> userPosts = user.getPosts();
         Post post = postServices.findById(response.getId());
         userPosts.add(post);
@@ -77,6 +78,16 @@ public class UserServiceImpl implements UserServices{
         User user = users.findByUsername(editRequest.getAuthor());
         if (user == null)throw new UserNotFoundException(editRequest.getAuthor()+" not found");
         return postServices.editPost(editRequest);
+    }
+
+    @Override
+    public LoginResponse login(LoginRequest loginRequest) {
+        User user = users.findByUsername(loginRequest.getUsername());
+        if (user == null)throw new UserNotFoundException(loginRequest.getUsername()+" not found");
+        if (!user.getPassword().equals(loginRequest.getPassword()))throw new IncorrectPasswordException("wrong password");
+        user.setLoggedIn(true);
+        users.save(user);
+        return mapLogin(user);
     }
 
 

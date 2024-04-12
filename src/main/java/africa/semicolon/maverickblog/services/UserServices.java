@@ -2,10 +2,7 @@ package africa.semicolon.maverickblog.services;
 
 import africa.semicolon.maverickblog.data.model.Post;
 import africa.semicolon.maverickblog.dtos.requests.*;
-import africa.semicolon.maverickblog.dtos.responses.AddPostResponse;
-import africa.semicolon.maverickblog.dtos.responses.CommentResponse;
-import africa.semicolon.maverickblog.dtos.responses.EditPostResponse;
-import africa.semicolon.maverickblog.dtos.responses.RegisterResponse;
+import africa.semicolon.maverickblog.dtos.responses.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,4 +23,6 @@ public interface UserServices {
     String deleteComment(DeleteCommentRequest deleteRequest);
 
     EditPostResponse editPost(EditPostRequest editRequest);
+
+    LoginResponse login(LoginRequest loginRequest);
 }

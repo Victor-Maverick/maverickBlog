@@ -4,6 +4,7 @@ import africa.semicolon.maverickblog.data.repository.Comments;
 import africa.semicolon.maverickblog.data.repository.Posts;
 import africa.semicolon.maverickblog.data.repository.Users;
 import africa.semicolon.maverickblog.dtos.requests.*;
+import africa.semicolon.maverickblog.exceptions.MaverickBlogException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,10 @@ public class UserServicesTest {
         registerRequest.setEmail("vic@gmail.com");
         registerRequest.setPhoneNumber("08148624687");
         userServices.register(registerRequest);
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("username");
+        loginRequest.setPassword("password");
+        userServices.login(loginRequest);
         CreatePostRequest postRequest = new CreatePostRequest();
         postRequest.setTitle("new note");
         postRequest.setContent("new content");
@@ -182,7 +187,54 @@ public class UserServicesTest {
         var user = userServices.register(registerRequest);
         assertNotNull(user.getId());
         assertEquals(1, users.count());
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("username");
+        loginRequest.setPassword("password");
+        userServices.login(loginRequest);
+        assertTrue(users.findByUsername("username").isLoggedIn());
+    }
+    @Test
+    public void loginWithWrongUsernameTest(){
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setUsername("username");
+        registerRequest.setPassword("password");
+        registerRequest.setEmail("vic@gmail.com");
+        registerRequest.setPhoneNumber("08148624687");
+        var user = userServices.register(registerRequest);
+        assertNotNull(user.getId());
+        assertEquals(1, users.count());
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("wrong username");
+        loginRequest.setPassword("password");
+        try {
+            userServices.login(loginRequest);
+        }
+        catch (MaverickBlogException e){
+            assertEquals(e.getMessage(), loginRequest.getUsername()+ " not found");
+        }
+        assertFalse(users.findByUsername("username").isLoggedIn());
+    }
 
+    @Test
+    public void loginWithWrongPassword_throwsExceptionTest(){
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setUsername("username");
+        registerRequest.setPassword("password");
+        registerRequest.setEmail("vic@gmail.com");
+        registerRequest.setPhoneNumber("08148624687");
+        var user = userServices.register(registerRequest);
+        assertNotNull(user.getId());
+        assertEquals(1, users.count());
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("username");
+        loginRequest.setPassword("wrong password");
+        try {
+            userServices.login(loginRequest);
+        }
+        catch (MaverickBlogException e){
+            assertEquals(e.getMessage(), "wrong password");
+        }
+        assertFalse(users.findByUsername("username").isLoggedIn());
     }
 
 }
