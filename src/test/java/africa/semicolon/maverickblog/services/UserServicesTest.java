@@ -159,7 +159,7 @@ public class UserServicesTest {
     }
 
     @Test
-    public void addCommentTest(){
+    public void addCommentWhileLoggedInTest(){
         RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setUsername("username4");
         registerRequest.setPassword("password");
@@ -196,7 +196,89 @@ public class UserServicesTest {
     }
 
     @Test
-    public void deleteCommentTest(){
+    public void addCommentWithoutLogInTest(){
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setUsername("username4");
+        registerRequest.setPassword("password");
+        registerRequest.setEmail("vic@gmail.com");
+        registerRequest.setPhoneNumber("08148624687");
+        userServices.register(registerRequest);
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("username4");
+        loginRequest.setPassword("password");
+        userServices.login(loginRequest);
+        CreatePostRequest postRequest = new CreatePostRequest();
+        postRequest.setTitle("new note");
+        postRequest.setContent("new content");
+        postRequest.setAuthor("username4");
+        var postResponse = userServices.addPost(postRequest);
+
+        RegisterRequest registerRequest2 = new RegisterRequest();
+        registerRequest2.setUsername("username2");
+        registerRequest2.setPassword("password2");
+        registerRequest2.setEmail("vic2@gmail.com");
+        registerRequest2.setPhoneNumber("09148624687");
+        userServices.register(registerRequest2);
+
+        CommentRequest commentRequest = new CommentRequest();
+        commentRequest.setPostId(postResponse.getId());
+        commentRequest.setComment("new comment");
+        commentRequest.setCommenterName("username2");
+        try {
+            userServices.addComment(commentRequest);
+        }catch (MaverickBlogException e){
+            assertEquals(e.getMessage(), "log in first");
+        }
+        assertEquals(1, comments.count());
+    }
+    @Test
+    public void deleteWhileLoggedInCommentTest(){
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setUsername("username4");
+        registerRequest.setPassword("password");
+        registerRequest.setEmail("vic@gmail.com");
+        registerRequest.setPhoneNumber("08148624687");
+        userServices.register(registerRequest);
+
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("username4");
+        loginRequest.setPassword("password");
+        userServices.login(loginRequest);
+
+        CreatePostRequest postRequest = new CreatePostRequest();
+        postRequest.setTitle("new note");
+        postRequest.setContent("new content");
+        postRequest.setAuthor("username4");
+        var postResponse = userServices.addPost(postRequest);
+
+        RegisterRequest registerRequest2 = new RegisterRequest();
+        registerRequest2.setUsername("username2");
+        registerRequest2.setPassword("password2");
+        registerRequest2.setEmail("vic2@gmail.com");
+        registerRequest2.setPhoneNumber("09148624687");
+        userServices.register(registerRequest2);
+
+        LoginRequest loginRequest2 = new LoginRequest();
+        loginRequest2.setUsername("username2");
+        loginRequest2.setPassword("password2");
+        userServices.login(loginRequest2);
+
+        CommentRequest commentRequest = new CommentRequest();
+        commentRequest.setPostId(postResponse.getId());
+        commentRequest.setComment("new comment");
+        commentRequest.setCommenterName("username2");
+        var commentResponse = userServices.addComment(commentRequest);
+        assertEquals(1, comments.count());
+        DeleteCommentRequest deleteRequest = new DeleteCommentRequest();
+        deleteRequest.setPostId(postResponse.getId());
+        deleteRequest.setCommentId(commentResponse.getId());
+        deleteRequest.setAuthor("username2");
+        userServices.deleteComment(deleteRequest);
+        assertEquals(0, comments.count());
+    }
+
+    @Test
+    public void deleteWithoutLogInCommentTest(){
         RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setUsername("username4");
         registerRequest.setPassword("password");
