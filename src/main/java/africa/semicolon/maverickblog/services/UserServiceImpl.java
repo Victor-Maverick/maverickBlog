@@ -5,9 +5,7 @@ import africa.semicolon.maverickblog.data.model.User;
 import africa.semicolon.maverickblog.data.repository.Users;
 import africa.semicolon.maverickblog.dtos.requests.*;
 import africa.semicolon.maverickblog.dtos.responses.*;
-import africa.semicolon.maverickblog.exceptions.IncorrectPasswordException;
-import africa.semicolon.maverickblog.exceptions.LoginException;
-import africa.semicolon.maverickblog.exceptions.UserNotFoundException;
+import africa.semicolon.maverickblog.exceptions.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,11 +21,13 @@ public class UserServiceImpl implements UserServices{
     private PostServices postServices;
     @Override
     public RegisterResponse register(RegisterRequest registerRequest) {
+        validateRegistration(registerRequest);
         User user = new User();
         map(user, registerRequest);
         users.save(user);
         return map(user);
     }
+
 
     @Override
     public AddPostResponse addPost(CreatePostRequest postRequest) {
@@ -103,5 +103,12 @@ public class UserServiceImpl implements UserServices{
         return "logout success";
     }
 
+    private void validateRegistration(RegisterRequest registerRequest) {
+        users.findAll().forEach(user -> {if (user.getUsername().equalsIgnoreCase(registerRequest.getUsername()))throw new UsernameExistsException(registerRequest.getUsername()+" exists");});
+        if (!registerRequest.getUsername().matches("^[a-zA-Z0-9]+$")) throw new InputMisMatchException("Invalid Input for username");
+        if (registerRequest.getUsername().isEmpty())throw new InputMisMatchException("Invalid Input for username");
+        if (registerRequest.getPassword().isEmpty())
+            throw new InputMisMatchException("Invalid Password, provide a Password");
+    }
 
 }
