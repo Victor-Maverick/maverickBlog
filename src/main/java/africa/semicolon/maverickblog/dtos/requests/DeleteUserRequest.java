@@ -7,5 +7,5 @@ import lombok.Setter;
 @Getter
 public class DeleteUserRequest {
     private String username;
-    private String password;
+
 }

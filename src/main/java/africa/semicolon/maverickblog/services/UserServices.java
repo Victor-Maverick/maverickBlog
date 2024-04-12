@@ -27,4 +27,6 @@ public interface UserServices {
     LoginResponse login(LoginRequest loginRequest);
 
     String logout(LogoutRequest logoutRequest);
+
+    String deleteUser(DeleteUserRequest deleteUserRequest);
 }

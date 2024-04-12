@@ -1,8 +1,10 @@
 package africa.semicolon.maverickblog.controllers;
 
 import africa.semicolon.maverickblog.dtos.requests.DeleteUserRequest;
+import africa.semicolon.maverickblog.dtos.requests.LoginRequest;
 import africa.semicolon.maverickblog.dtos.requests.RegisterRequest;
 import africa.semicolon.maverickblog.dtos.responses.ApiResponse;
+import africa.semicolon.maverickblog.dtos.responses.LoginResponse;
 import africa.semicolon.maverickblog.dtos.responses.RegisterResponse;
 import africa.semicolon.maverickblog.exceptions.MaverickBlogException;
 import africa.semicolon.maverickblog.services.UserServices;
@@ -36,6 +38,23 @@ public class UserController {
 
     @DeleteMapping("sign-off")
     public ResponseEntity<?> deleteUser(@RequestBody DeleteUserRequest deleteUserRequest) {
-        try
+        try{
+            String response = userServices.deleteUser(deleteUserRequest);
+            return new ResponseEntity<>(new ApiResponse(true, response), OK);
+        }
+        catch (MaverickBlogException e){
+            return new ResponseEntity<>(new ApiResponse(false, e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/sign-in")
+    public ResponseEntity<?> login(LoginRequest loginRequest) {
+        try {
+            LoginResponse response = userServices.login(loginRequest);
+            return new ResponseEntity<>(new ApiResponse(true, response), OK);
+        }
+        catch (MaverickBlogException e){
+            return new ResponseEntity<>(new ApiResponse(false, e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 }

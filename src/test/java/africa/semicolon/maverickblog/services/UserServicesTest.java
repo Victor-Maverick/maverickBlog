@@ -468,4 +468,40 @@ public class UserServicesTest {
         assertFalse(users.findByUsername("username4").isLoggedIn());
     }
 
+    @Test
+    public void deleteUserWhileLoggedInTest(){
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setUsername("username4");
+        registerRequest.setPassword("password");
+        registerRequest.setEmail("vic@gmail.com");
+        registerRequest.setPhoneNumber("08148624687");
+        userServices.register(registerRequest);
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("username4");
+        loginRequest.setPassword("password");
+        userServices.login(loginRequest);
+        DeleteUserRequest deleteRequest = new DeleteUserRequest();
+        deleteRequest.setUsername("username4");
+        userServices.deleteUser(deleteRequest);
+        assertEquals(0, users.count());
+    }
+
+    @Test
+    public void deleteUserWithoutLogInTest(){
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setUsername("username4");
+        registerRequest.setPassword("password");
+        registerRequest.setEmail("vic@gmail.com");
+        registerRequest.setPhoneNumber("08148624687");
+        userServices.register(registerRequest);
+        DeleteUserRequest deleteRequest = new DeleteUserRequest();
+        deleteRequest.setUsername("username4");
+        try {
+            userServices.deleteUser(deleteRequest);
+        }
+        catch (MaverickBlogException e){
+            assertEquals(e.getMessage(), "log in first");
+        }
+        assertEquals(1, users.count());
+    }
 }

@@ -103,6 +103,15 @@ public class UserServiceImpl implements UserServices{
         return "logout success";
     }
 
+    @Override
+    public String deleteUser(DeleteUserRequest deleteUserRequest) {
+        User user = users.findByUsername(deleteUserRequest.getUsername());
+        if(user == null)throw new UserNotFoundException(deleteUserRequest.getUsername()+ " not found");
+        validateUserLogin(user);
+        users.delete(user);
+        return "delete success";
+    }
+
     private void validateRegistration(RegisterRequest registerRequest) {
         users.findAll().forEach(user -> {if (user.getUsername().equalsIgnoreCase(registerRequest.getUsername()))throw new UsernameExistsException(registerRequest.getUsername()+" exists");});
         if (!registerRequest.getUsername().matches("^[a-zA-Z0-9]+$")) throw new InputMisMatchException("Invalid Input for username");
