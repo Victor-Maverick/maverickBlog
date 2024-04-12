@@ -5,6 +5,7 @@ import africa.semicolon.maverickblog.dtos.requests.*;
 import africa.semicolon.maverickblog.dtos.responses.AddPostResponse;
 import africa.semicolon.maverickblog.dtos.responses.CommentResponse;
 import africa.semicolon.maverickblog.dtos.responses.EditPostResponse;
+import africa.semicolon.maverickblog.dtos.responses.ViewPostResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public interface PostServices {
     Post findById(String id);
 
     List<Post> findByAuthor(String username);
-    void viewPost(AddViewRequest viewRequest);
+    ViewPostResponse viewPost(AddViewRequest viewRequest);
 
     CommentResponse addComment(CommentRequest commentRequest);
 

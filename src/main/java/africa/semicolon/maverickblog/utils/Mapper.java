@@ -14,6 +14,15 @@ import java.time.LocalDateTime;
 
 public class Mapper {
 
+    public static ViewPostResponse mapView(Post post){
+        ViewPostResponse response = new ViewPostResponse();
+        response.setPostId(post.getId());
+        response.setPostTitle(post.getTitle());
+        response.setContent(post.getContent());
+        response.setComments(post.getComments());
+        return response;
+    }
+
     public static LoginResponse mapLogin(User user){
         LoginResponse response = new LoginResponse();
         response.setId(user.getId());

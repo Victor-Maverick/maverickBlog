@@ -5,10 +5,7 @@ import africa.semicolon.maverickblog.data.model.Post;
 import africa.semicolon.maverickblog.data.model.View;
 import africa.semicolon.maverickblog.data.repository.Posts;
 import africa.semicolon.maverickblog.dtos.requests.*;
-import africa.semicolon.maverickblog.dtos.responses.AddPostResponse;
-import africa.semicolon.maverickblog.dtos.responses.CommentResponse;
-import africa.semicolon.maverickblog.dtos.responses.EditPostResponse;
-import africa.semicolon.maverickblog.dtos.responses.ViewResponse;
+import africa.semicolon.maverickblog.dtos.responses.*;
 import africa.semicolon.maverickblog.exceptions.PostNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,8 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static africa.semicolon.maverickblog.utils.Mapper.map;
-import static africa.semicolon.maverickblog.utils.Mapper.mapAdd;
+import static africa.semicolon.maverickblog.utils.Mapper.*;
 
 @Service
 @AllArgsConstructor
@@ -65,7 +61,7 @@ public class PostServicesImpl implements PostServices{
     }
 
     @Override
-    public void viewPost(AddViewRequest viewRequest) {
+    public ViewPostResponse viewPost(AddViewRequest viewRequest) {
         Post post = findById(viewRequest.getPostId());
         ViewResponse response = viewServices.addView(viewRequest);
         View view = viewServices.findBy(response.getId());
@@ -74,6 +70,7 @@ public class PostServicesImpl implements PostServices{
         views.add(view);
         post.setViews(views);
         posts.save(post);
+        return mapView(post);
     }
 
     @Override

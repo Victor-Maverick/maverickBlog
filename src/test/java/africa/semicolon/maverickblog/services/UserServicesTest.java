@@ -59,18 +59,81 @@ public class UserServicesTest {
         postRequest.setAuthor("username");
         userServices.addPost(postRequest);
         assertEquals(1, userServices.findPostFor("username").size());
+    }
+    @Test
+    public void addPostWithoutLogin_throwsExceptionTest(){
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setUsername("username");
+        registerRequest.setPassword("password");
+        registerRequest.setEmail("vic@gmail.com");
+        registerRequest.setPhoneNumber("08148624687");
+        userServices.register(registerRequest);
+        CreatePostRequest postRequest = new CreatePostRequest();
+        postRequest.setTitle("new note");
+        postRequest.setContent("new content");
+        postRequest.setAuthor("username");
+        try {
+            userServices.addPost(postRequest);
+        }
+        catch (MaverickBlogException e){
+            assertEquals(e.getMessage(), "log in first");
+        }
+        assertEquals(1, userServices.findPostFor("username").size());
 
 
     }
 
+
     @Test
-    public void viewPostTest(){
+    public void viewPostWhileLoggedInTest(){
         RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setUsername("username4");
         registerRequest.setPassword("password");
         registerRequest.setEmail("vic@gmail.com");
         registerRequest.setPhoneNumber("08148624687");
         userServices.register(registerRequest);
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("username4");
+        loginRequest.setPassword("password");
+        userServices.login(loginRequest);
+        CreatePostRequest postRequest = new CreatePostRequest();
+        postRequest.setTitle("new note");
+        postRequest.setContent("new content");
+        postRequest.setAuthor("username4");
+        var postResponse = userServices.addPost(postRequest);
+
+        RegisterRequest registerRequest2 = new RegisterRequest();
+        registerRequest2.setUsername("username2");
+        registerRequest2.setPassword("password2");
+        registerRequest2.setEmail("vic2@gmail.com");
+        registerRequest2.setPhoneNumber("09148624687");
+        userServices.register(registerRequest2);
+
+        LoginRequest loginRequest2 = new LoginRequest();
+        loginRequest2.setUsername("username2");
+        loginRequest2.setPassword("password");
+        userServices.login(loginRequest2);
+
+        AddViewRequest viewRequest = new AddViewRequest();
+        viewRequest.setViewerName("username2");
+        viewRequest.setPostId(postResponse.getId());
+        userServices.viewPost(viewRequest);
+        assertEquals(1, posts.count());
+        assertEquals(1, userServices.findPostFor("username4").size());
+    }
+
+    @Test
+    public void viewPostWithoutLogIn_throwsExceptionTest(){
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setUsername("username4");
+        registerRequest.setPassword("password");
+        registerRequest.setEmail("vic@gmail.com");
+        registerRequest.setPhoneNumber("08148624687");
+        userServices.register(registerRequest);
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("username4");
+        loginRequest.setPassword("password");
+        userServices.login(loginRequest);
         CreatePostRequest postRequest = new CreatePostRequest();
         postRequest.setTitle("new note");
         postRequest.setContent("new content");
@@ -86,7 +149,11 @@ public class UserServicesTest {
         AddViewRequest viewRequest = new AddViewRequest();
         viewRequest.setViewerName("username2");
         viewRequest.setPostId(postResponse.getId());
-        userServices.viewPost(viewRequest);
+        try {
+            userServices.viewPost(viewRequest);
+        }catch (MaverickBlogException e){
+            assertEquals(e.getMessage(), "log in first");
+        }
         assertEquals(1, posts.count());
         assertEquals(1, userServices.findPostFor("username4").size());
     }
@@ -99,6 +166,10 @@ public class UserServicesTest {
         registerRequest.setEmail("vic@gmail.com");
         registerRequest.setPhoneNumber("08148624687");
         userServices.register(registerRequest);
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("username4");
+        loginRequest.setPassword("password");
+        userServices.login(loginRequest);
         CreatePostRequest postRequest = new CreatePostRequest();
         postRequest.setTitle("new note");
         postRequest.setContent("new content");
@@ -111,6 +182,10 @@ public class UserServicesTest {
         registerRequest2.setEmail("vic2@gmail.com");
         registerRequest2.setPhoneNumber("09148624687");
         userServices.register(registerRequest2);
+        LoginRequest loginRequest2 = new LoginRequest();
+        loginRequest2.setUsername("username2");
+        loginRequest2.setPassword("password2");
+        userServices.login(loginRequest2);
 
         CommentRequest commentRequest = new CommentRequest();
         commentRequest.setPostId(postResponse.getId());
@@ -128,6 +203,12 @@ public class UserServicesTest {
         registerRequest.setEmail("vic@gmail.com");
         registerRequest.setPhoneNumber("08148624687");
         userServices.register(registerRequest);
+
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("username4");
+        loginRequest.setPassword("password");
+        userServices.login(loginRequest);
+
         CreatePostRequest postRequest = new CreatePostRequest();
         postRequest.setTitle("new note");
         postRequest.setContent("new content");
@@ -140,6 +221,11 @@ public class UserServicesTest {
         registerRequest2.setEmail("vic2@gmail.com");
         registerRequest2.setPhoneNumber("09148624687");
         userServices.register(registerRequest2);
+
+        LoginRequest loginRequest2 = new LoginRequest();
+        loginRequest2.setUsername("username2");
+        loginRequest2.setPassword("password2");
+        userServices.login(loginRequest2);
 
         CommentRequest commentRequest = new CommentRequest();
         commentRequest.setPostId(postResponse.getId());
@@ -163,6 +249,10 @@ public class UserServicesTest {
         registerRequest.setEmail("vic@gmail.com");
         registerRequest.setPhoneNumber("08148624687");
         userServices.register(registerRequest);
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("username4");
+        loginRequest.setPassword("password");
+        userServices.login(loginRequest);
         CreatePostRequest postRequest = new CreatePostRequest();
         postRequest.setTitle("new note");
         postRequest.setContent("new content");

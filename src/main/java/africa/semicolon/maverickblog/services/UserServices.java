@@ -16,7 +16,7 @@ public interface UserServices {
 
     List<Post> findPostFor(String username);
 
-    void viewPost(AddViewRequest viewRequest);
+    ViewPostResponse viewPost(AddViewRequest viewRequest);
 
     CommentResponse addComment(CommentRequest commentRequest);
 
