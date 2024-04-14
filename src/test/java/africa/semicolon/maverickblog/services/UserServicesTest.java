@@ -59,6 +59,7 @@ public class UserServicesTest {
         postRequest.setAuthor("username");
         userServices.addPost(postRequest);
         assertEquals(1, userServices.findPostFor("username").size());
+        assertEquals(1, users.findByUsername("username").getPosts().size());
     }
     @Test
     public void addPostWithoutLogin_throwsExceptionTest(){
@@ -80,7 +81,31 @@ public class UserServicesTest {
         }
         assertEquals(1, userServices.findPostFor("username").size());
 
+    }
 
+    @Test
+    public void deletePost_listOfPostsDecreasesTest(){
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setUsername("username");
+        registerRequest.setPassword("password");
+        registerRequest.setEmail("vic@gmail.com");
+        registerRequest.setPhoneNumber("08148624687");
+        userServices.register(registerRequest);
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("username");
+        loginRequest.setPassword("password");
+        userServices.login(loginRequest);
+        CreatePostRequest postRequest = new CreatePostRequest();
+        postRequest.setTitle("new note");
+        postRequest.setContent("new content");
+        postRequest.setAuthor("username");
+        var postResponse = userServices.addPost(postRequest);
+        assertEquals(1, userServices.findPostFor("username").size());
+        DeletePostRequest deletePostRequest = new DeletePostRequest();
+        deletePostRequest.setId(postResponse.getId());
+        deletePostRequest.setAuthor("username");
+        userServices.deletePost(deletePostRequest);
+        assertEquals(0, posts.count());
     }
 
 
@@ -193,6 +218,7 @@ public class UserServicesTest {
         commentRequest.setCommenterName("username2");
         userServices.addComment(commentRequest);
         assertEquals(1, comments.count());
+        assertEquals(1, posts.findByAuthor("username4").size());
     }
 
     @Test
@@ -232,7 +258,7 @@ public class UserServicesTest {
         assertEquals(0, comments.count());
     }
     @Test
-    public void deleteWhileLoggedInCommentTest(){
+    public void deleteCommentWhileLoggedInTest(){
         RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setUsername("username4");
         registerRequest.setPassword("password");
@@ -278,7 +304,7 @@ public class UserServicesTest {
     }
 
     @Test
-    public void deleteWithoutLogInCommentTest(){
+    public void deleteCommentWithoutLogInTest(){
         RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setUsername("username4");
         registerRequest.setPassword("password");

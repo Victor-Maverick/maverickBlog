@@ -35,8 +35,9 @@ public class Mapper {
     public static CommentResponse map(Comment comment, CommentRequest commentRequest){
         CommentResponse response = new CommentResponse();
         response.setId(comment.getId());
-        response.setCommenter(commentRequest.getCommenterName());
+        response.setCommenter(comment.getCommenter());
         response.setComment(comment.getComment());
+        response.setTimeCommented(comment.getDateCommented());
         return response;
     }
     public static void map(Post post, EditPostRequest editRequest){

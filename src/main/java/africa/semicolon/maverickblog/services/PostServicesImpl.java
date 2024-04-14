@@ -41,9 +41,9 @@ public class PostServicesImpl implements PostServices{
 
     @Override
     public String deletePost(DeletePostRequest deleteRequest) {
-        Optional<Post> post = posts.findById(deleteRequest.getId());
-        if(post.isEmpty())throw new PostNotFoundException("post not found");
-        posts.delete(post.get());
+        Post post = posts.findPostById(deleteRequest.getId());
+        if(post == null)throw new PostNotFoundException("post not found");
+        posts.deleteById(deleteRequest.getId());
         return "delete successful";
     }
 
@@ -91,7 +91,7 @@ public class PostServicesImpl implements PostServices{
         Post post = findById(deleteRequest.getPostId());
         if(post==null)throw new PostNotFoundException("post not found");
         List<Comment>comments = post.getComments();
-        comments.removeIf(comment -> comment.getId() == deleteRequest.getCommentId());
+        comments.removeIf(comment -> comment.getId().equals(deleteRequest.getCommentId()));
         post.setComments(comments);
         commentServices.deleteComment(deleteRequest);
         posts.save(post);

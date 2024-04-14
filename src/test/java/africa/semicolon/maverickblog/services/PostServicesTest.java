@@ -114,7 +114,6 @@ public class PostServicesTest {
         commentRequest.setComment("new comment");
         commentRequest.setCommenterName("username");
         var commentResponse  = postServices.addComment(commentRequest);
-        System.out.println(commentResponse);
         assertEquals(1, comments.count());
         DeleteCommentRequest deleteRequest = new DeleteCommentRequest();
         deleteRequest.setPostId(postResponse.getId());
@@ -122,6 +121,7 @@ public class PostServicesTest {
         deleteRequest.setAuthor("username");
         postServices.deleteComment(deleteRequest);
         assertEquals(0, comments.count());
+        assertEquals(1, posts.findByAuthor("username").size());
     }
 
 }

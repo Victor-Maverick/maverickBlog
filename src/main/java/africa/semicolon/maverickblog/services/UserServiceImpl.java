@@ -112,6 +112,20 @@ public class UserServiceImpl implements UserServices{
         return "delete success";
     }
 
+    @Override
+    public String deletePost(DeletePostRequest deletePostRequest) {
+        User user = users.findByUsername(deletePostRequest.getAuthor());
+        if (user == null) throw new UserNotFoundException(deletePostRequest.getAuthor()+ " not found");
+        Post post = postServices.findById(deletePostRequest.getId());
+        postServices.deletePost(deletePostRequest);
+        if (post == null)throw new PostNotFoundException("post not found");
+        List<Post>posts = user.getPosts();
+        posts.remove(post);
+        user.setPosts(posts);
+        users.save(user);
+        return "delete successful";
+    }
+
     private void validateRegistration(RegisterRequest registerRequest) {
         users.findAll().forEach(user -> {if (user.getUsername().equalsIgnoreCase(registerRequest.getUsername()))throw new UsernameExistsException(registerRequest.getUsername()+" exists");});
         if (!registerRequest.getUsername().matches("^[a-zA-Z0-9]+$")) throw new InputMisMatchException("Invalid Input for username");

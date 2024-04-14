@@ -19,7 +19,8 @@ public class CommentServiceImpl implements CommentServices{
     private final Comments comments;
     public CommentResponse addComment(CommentRequest commentRequest) {
         Comment comment = new Comment();
-        comment.setComment(comment.getComment());
+        comment.setComment(commentRequest.getComment());
+        comment.setCommenter(commentRequest.getCommenterName());
         comments.save(comment);
         return map(comment, commentRequest);
     }
