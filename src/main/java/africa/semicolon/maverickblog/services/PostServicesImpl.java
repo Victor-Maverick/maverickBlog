@@ -7,6 +7,7 @@ import africa.semicolon.maverickblog.data.repository.Posts;
 import africa.semicolon.maverickblog.dtos.requests.*;
 import africa.semicolon.maverickblog.dtos.responses.*;
 import africa.semicolon.maverickblog.exceptions.PostNotFoundException;
+import africa.semicolon.maverickblog.exceptions.TitleExistsException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,7 @@ public class PostServicesImpl implements PostServices{
     private final CommentServices commentServices;
     @Override
     public AddPostResponse addPost(CreatePostRequest postRequest) {
+        posts.findAll().forEach(post -> {if (post.getTitle().equalsIgnoreCase(postRequest.getTitle()))throw new TitleExistsException("title exists");});
         Post post = new Post();
         map(post, postRequest);
         posts.save(post);
