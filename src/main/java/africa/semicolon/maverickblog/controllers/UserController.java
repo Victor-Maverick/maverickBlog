@@ -34,7 +34,7 @@ public class UserController {
         }
     }
     @DeleteMapping("/delete-post")
-    public ResponseEntity<?> deletePost(DeletePostRequest deletePostRequest){
+    public ResponseEntity<?> deletePost(@RequestBody DeletePostRequest deletePostRequest){
         try{
             String response = userServices.deletePost(deletePostRequest);
             return new ResponseEntity<>(new ApiResponse(true, response), OK);
@@ -125,6 +125,17 @@ public class UserController {
     public ResponseEntity<?> addComment(@RequestBody CommentRequest commentRequest) {
         try{
             var response = userServices.addComment(commentRequest);
+            return new ResponseEntity<>(new ApiResponse(true, response), OK);
+        }
+        catch (MaverickBlogException e){
+            return new ResponseEntity<>(new ApiResponse(false, e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/delete-comment")
+    public ResponseEntity<?> deleteComment(@RequestBody DeleteCommentRequest deleteRequest){
+        try{
+            var response = userServices.deleteComment(deleteRequest);
             return new ResponseEntity<>(new ApiResponse(true, response), OK);
         }
         catch (MaverickBlogException e){
