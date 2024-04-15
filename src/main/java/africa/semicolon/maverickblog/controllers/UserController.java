@@ -24,7 +24,7 @@ public class UserController {
 
 
     @PatchMapping("/edit-post")
-    public ResponseEntity<?> editPost(EditPostRequest editPostRequest){
+    public ResponseEntity<?> editPost(@RequestBody EditPostRequest editPostRequest){
         try{
             EditPostResponse response = userServices.editPost(editPostRequest);
             return new ResponseEntity<>(new ApiResponse(true, response), OK);
